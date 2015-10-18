@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<title>JS — Loader</title>
+		<link rel="canonical" href="/">
+		<meta name="author" content="Studio Meta">
+		<meta name="copyright" content="© Studio Meta">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes">
+
+		<link rel="shortcut icon" type="image/png" href="/icon.png">
+
+		<style type="text/css">
+			*, *:after, *:before { box-sizing: border-box; }
+
+			body {
+				margin: 0;
+				font: 1em/1.45 Arial, sans-serif;
+				text-align: center;
+				color: #222;
+			}
+
+			main {
+				width: 100%;
+				max-width: 42em;
+				margin: 6em auto 8em;
+				padding: 1em;
+			}
+
+			p { margin: 2.3em auto; }
+
+			a:not([class]) {
+				color: inherit;
+				text-decoration: none;
+				border-bottom: 1px solid;
+			}
+
+			h1, h2, h3, h4 {
+				margin: 2.414em 0 1.5em;
+				line-height: 1.2;
+			}
+
+			h1 {
+				margin-top: 0;
+				margin-bottom: 0;
+				line-height: 1;
+				font-size: 3.157em;
+			}
+
+			h2 { font-size: 2.369em; }
+			h3 { font-size: 1.777em; }
+			h4 { font-size: 1.333em; }
+
+			small { font-size: 0.75em; }
+
+			.icon {
+				display: inline-block;
+				vertical-align: middle;
+				margin-top: -1px;
+				margin-right: 0.25em;
+				fill: currentColor;
+			}
+
+			.icon-facebook { width: 0.5712890625em; }
+			.icon-twitter { width: 0.9287109375em; }
+			.icon-pinterest { width: 0.7138671875em; }
+
+			button {
+				display: inline-block;
+				margin: 0 0.5em;
+				padding: 0.5em 1em;
+				font: inherit;
+				font-weight: 700;
+				color: inherit;
+				-webkit-appearance: none;
+				background: none;
+				border: 3px solid;
+				cursor: pointer;
+				transition: background 0.2s ease-out;
+			}
+
+			button:hover { color: #111; }
+			button:focus { outline: 2px solid -webkit-focus-ring-color;}
+			button:active { transform: translate(0, 1px); }
+
+			.studiometa {
+				display: inline-block;
+				padding: 0.5em;
+			}
+
+			.studiometa span { display: block; }
+
+			.l {
+				position: relative;
+				margin: auto;
+				width: 20px;
+				height: 14px;
+				overflow: hidden;
+			}
+
+			.l-c-1,
+			.l-c-2,
+			.l-r-1,
+			.l-r-2 {
+				position: absolute;
+				background: #aaa;
+			}
+
+			.l-c-1,
+			.l-c-2 {
+				left: 0;
+				width: 6px;
+				height: 6px;
+				border-radius: 3px;
+			}
+
+			.l-c-1 { top: 0; }
+			.l-c-2 { top: 8px; }
+
+			.l-r-1,
+			.l-r-2 {
+				top: 0;
+				width: 4px;
+				height: 14px;
+			}
+
+			.l-r-1 { left: 9px; }
+			.l-r-2 { left: 16px; }
+
+			.percentage {
+				line-height: 1.8;
+				background: #eee;
+			}
+
+			.percentage,
+			.percentage span:last-child {
+				position: relative;
+			}
+
+			.percentage-bar {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: #ccc;
+				transform: scale(0, 1);
+				transform-origin: top left;
+				transition: all 0.3s ease-in-out;
+			}
+
+			img {
+				display: block;
+				width: 100%;
+				height: auto;
+			}
+		</style>
+
+	</head>
+	<body>
+
+		<main>
+			<section>
+				<h1>JS — Loader</h1>
+				<p>Petit script pour simuler un loader en chargeant un groupe d'images les unes après les autres. Il permet d'éxécuter un <i>callback</i> au chargement de chaque image et au chargement de toutes les images.</p>
+				<p>Utilisé pour le <i>loader</i> de <a href="http://signesduquotidien.org/" title="Signes du quotidien" target="_blank">Signes du quotidien</a>.</p>
+				<p>
+					<button type="button" id="js-add-images">Charger des images</button>
+				</p>
+				<p class="percentage">
+					<span class="percentage-bar" id="js-percentage-bar"></span>
+					<span id="js-percentage-text">0%</span>
+				</p>
+			</section>
+			<section id="js-images-container"></section>
+			<section>
+				<p>
+					<a class="studiometa" href="http://www.studiometa.fr/" target="_blank" title="Studio Meta, Agence Web Strasbourg">
+						<span class="l">
+							<span class="l-c-1"></span>
+							<span class="l-c-2"></span>
+							<span class="l-r-1"></span>
+							<span class="l-r-2"></span>
+						</span>
+					</a>
+				</p>
+			</section>
+		</main>
+
+		<script defer src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script defer src="/dist/loader.min.js"></script>
+		<script defer>
+		document.addEventListener('DOMContentLoaded', function() {
+
+			var btn = document.getElementById('js-add-images');
+			var bar = document.getElementById('js-percentage-bar');
+			var txt = document.getElementById('js-percentage-text');
+			var container = document.getElementById('js-images-container');
+
+			btn.addEventListener('click', function() {
+				// Prevent multiple click
+				this.style.pointerEvents = 'none';
+
+				$.ajax({
+					url: './images.html'
+				})
+				.done(function(data) {
+					// Get all the images in an array
+					var el = document.createElement('div');
+					el.innerHTML = data;
+					var images = el.querySelectorAll('img');
+					// Create a new loader
+					var loader = new Loader(images, {
+						attr: 'data-src',
+						onImageLoad: function(percentage) {
+							bar.style.transform = 'scale(' + percentage/100 + ', 1)';
+							txt.innerHTML = percentage + '%';
+						},
+						onComplete: function() {
+							var L = this;
+							// Append data only when the loader
+							// is finished animating
+							bar.addEventListener('transitionend', function() {
+								container.innerHTML = data;
+								var images = container.querySelectorAll('img');
+								for (var i = 0; i < images.length; i++) {
+									images[i].src = images[i].getAttribute(L.attr);
+									images[i].removeAttribute(L.attr);
+								}
+							});
+						}
+					});
+
+				});
+			});
+
+		});
+		</script>
+	</body>
+</html>
