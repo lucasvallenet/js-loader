@@ -1,10 +1,10 @@
 # Loader
 
-Petit script pour simuler un loader en chargeant un groupe d'images les unes après les autres. Il permet d'éxécuter un _callback_ au chargement de chaque image et au chargement de toutes les images.
+js-loader is a script that simulates a loader by loading one image after another. It allows you to run a callback after each image loaded and when all images are loaded.
 
-Utilisé pour le _loader_ de [Signes du quotidien](http://signesduquotidien.org/).
+Used for the loader of [Signes du quotidien](http://signesduquotidien.org/).
 
-## Utilisation
+## Use
 
 ```js
 var images = [
