@@ -1,6 +1,6 @@
 # Loader
 
-js-loader is a script that simulates a loader by loading one image after another. It allows you to run a callback after each image loaded and when all images are loaded.
+js-loader is a script that simulates a loader by loading one image after another. It allows you to run a callback after each image loaded and also when all images are loaded. You'll be able to use a loading percentage that is updated after each image loaded to animate your loader for example.
 
 Used for the loader on [Signes du quotidien](http://signesduquotidien.org/).
 
